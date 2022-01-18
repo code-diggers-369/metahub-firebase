@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "264850614515",
+    "project_id": "meta-hub",
+    "storage_bucket": "meta-hub.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:264850614515:android:93b2776b10df99d200af86",
+        "android_client_info": {
+          "package_name": "com.metahub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "264850614515-4rs0hfqa80sljgtj3qchlg0gs3efruo9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.metahub",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "264850614515-06t8lm1b56htngu7fogvjaa2d9fu9ls5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhqVNdmLbGoUzaxyx1o5fCL29m-tdWGMY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "264850614515-06t8lm1b56htngu7fogvjaa2d9fu9ls5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
