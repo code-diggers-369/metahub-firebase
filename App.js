@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
-import firestore from '@react-native-firebase/firestore';
+import database from '@react-native-firebase/database';
 
 export default function App() {
   const [myData, setMyData] = useState(null);
@@ -11,13 +11,11 @@ export default function App() {
 
   const getDatabase = async () => {
     try {
-      const data = await firestore()
-        .collection('testing')
-        .doc('OJYCVAzeg6ppxkLLQlsI')
-        .get();
+      const data = await database().ref('users/1').once('value');
 
-      setMyData(data._data);
-      console.log(data._data);
+      console.log(data);
+
+      setMyData(data.val());
     } catch (err) {
       console.log(err);
     }
@@ -27,9 +25,6 @@ export default function App() {
     <View>
       <Text>Name:-{myData ? myData.name : 'Loading...'}</Text>
       <Text>Age:-{myData ? myData.age : 'Loading...'}</Text>
-      <Text>
-        Hobby:-{myData ? myData.hobby.map(list => `  ${list}`) : 'Loading...'}
-      </Text>
     </View>
   );
 }
