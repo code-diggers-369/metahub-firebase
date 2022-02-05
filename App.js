@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   StatusBar,
   FlatList,
+  Alert,
 } from 'react-native';
 import database from '@react-native-firebase/database';
 
@@ -84,6 +85,41 @@ export default function App() {
     }
   };
 
+  const handleCardLongPress = (cardIndex, cardValue) => {
+    try {
+      Alert.alert('Alert', `Are You Sure To Delete ${cardValue} ?`, [
+        {
+          text: 'Cancel',
+          onPress: () => {
+            console.log('Cancel Is Press');
+          },
+        },
+        {
+          text: 'Ok',
+          onPress: async () => {
+            try {
+              const response = await database()
+                .ref(`todo/${cardIndex}`)
+                .remove();
+
+              setInputTextValue('');
+              setIsUpdateData(false);
+              console.log(response);
+            } catch (err) {
+              console.log(err);
+            }
+          },
+        },
+      ]);
+
+      // setIsUpdateData(true);
+      // setSelectedCardIndex(cardIndex);
+      // setInputTextValue(cardValue);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar hidden={true} />
@@ -125,7 +161,10 @@ export default function App() {
               return (
                 <TouchableOpacity
                   style={styles.card}
-                  onPress={() => handleCardPress(cardIndex, item.item.value)}>
+                  onPress={() => handleCardPress(cardIndex, item.item.value)}
+                  onLongPress={() =>
+                    handleCardLongPress(cardIndex, item.item.value)
+                  }>
                   <Text>{item.item.value}</Text>
                 </TouchableOpacity>
               );
