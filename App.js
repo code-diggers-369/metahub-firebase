@@ -14,6 +14,8 @@ import database from '@react-native-firebase/database';
 export default function App() {
   const [inputTextValue, setInputTextValue] = useState(null);
   const [list, setList] = useState(null);
+  const [isUpdateData, setIsUpdateData] = useState(false);
+  const [selectedCardIndex, setSelectedCardIndex] = useState(null);
 
   useEffect(() => {
     getDatabase();
@@ -35,14 +37,48 @@ export default function App() {
 
   const handleAddData = async () => {
     try {
-      const index = list.length;
-      const response = await database().ref(`todo/${index}`).set({
-        value: inputTextValue,
-      });
+      if (inputTextValue.length > 0) {
+        const index = list.length;
+        const response = await database().ref(`todo/${index}`).set({
+          value: inputTextValue,
+        });
 
-      console.log(response);
+        console.log(response);
 
-      setInputTextValue('');
+        setInputTextValue('');
+      } else {
+        alert('Please Enter Value & Then Try Again');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleUpdateData = async () => {
+    try {
+      if (inputTextValue.length > 0) {
+        const response = await database()
+          .ref(`todo/${selectedCardIndex}`)
+          .update({
+            value: inputTextValue,
+          });
+
+        console.log(response);
+        setInputTextValue('');
+        setIsUpdateData(false);
+      } else {
+        alert('Please Enter Value & Then Try Again');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleCardPress = (cardIndex, cardValue) => {
+    try {
+      setIsUpdateData(true);
+      setSelectedCardIndex(cardIndex);
+      setInputTextValue(cardValue);
     } catch (err) {
       console.log(err);
     }
@@ -61,11 +97,19 @@ export default function App() {
           value={inputTextValue}
           onChangeText={value => setInputTextValue(value)}
         />
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => handleAddData()}>
-          <Text style={{color: '#fff'}}>Add</Text>
-        </TouchableOpacity>
+        {!isUpdateData ? (
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => handleAddData()}>
+            <Text style={{color: '#fff'}}>Add</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => handleUpdateData()}>
+            <Text style={{color: '#fff'}}>Update</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       <View style={styles.cardContainer}>
@@ -76,11 +120,14 @@ export default function App() {
         <FlatList
           data={list}
           renderItem={item => {
+            const cardIndex = item.index;
             if (item.item !== null) {
               return (
-                <View style={styles.card}>
+                <TouchableOpacity
+                  style={styles.card}
+                  onPress={() => handleCardPress(cardIndex, item.item.value)}>
                   <Text>{item.item.value}</Text>
-                </View>
+                </TouchableOpacity>
               );
             }
           }}
