@@ -10,7 +10,7 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, StackActions} from '@react-navigation/native';
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 
@@ -24,17 +24,18 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      const isUserLogin = await auth().signInWithEmailAndPassword(
-        email,
-        password,
-      );
-      setMessage('');
-      console.log(isUserLogin);
+      if (email.length > 0 && password.length > 0) {
+        const isUserLogin = await auth().signInWithEmailAndPassword(
+          email,
+          password,
+        );
+        setMessage('');
+        console.log(isUserLogin);
 
-      navigation.navigate('Home', {
-        email: isUserLogin.user.email,
-        uid: isUserLogin.user.uid,
-      });
+        navigation.dispatch(StackActions.replace('Home'));
+      } else {
+        alert('Please Enter All Data');
+      }
     } catch (err) {
       console.log(err);
 

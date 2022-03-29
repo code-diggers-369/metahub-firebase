@@ -24,14 +24,18 @@ export default function SignupScreen() {
 
   const handleSignup = async () => {
     try {
-      const isUserCreated = await auth().createUserWithEmailAndPassword(
-        email,
-        password,
-      );
+      if (email.length > 0 && password.length > 0) {
+        const isUserCreated = await auth().createUserWithEmailAndPassword(
+          email,
+          password,
+        );
 
-      console.log(isUserCreated);
+        console.log(isUserCreated);
 
-      navigation.navigate('Login');
+        navigation.navigate('Login');
+      } else {
+        alert('Please Enter All Data');
+      }
     } catch (err) {
       console.log(err);
 
