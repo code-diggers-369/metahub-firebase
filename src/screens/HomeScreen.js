@@ -24,7 +24,7 @@ export default function HomeScreen() {
         }}
         onPress={async () => {
           await Auth().signOut();
-          navigation.dispatch(StackActions.popToTop());
+          navigation.dispatch(StackActions.replace('Login'));
           // navigation.navigate('Login');
         }}>
         <Text style={{color: '#fff'}}>Logout</Text>

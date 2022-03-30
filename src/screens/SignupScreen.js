@@ -30,7 +30,11 @@ export default function SignupScreen() {
           password,
         );
 
-        console.log(isUserCreated);
+        await auth().currentUser.sendEmailVerification();
+
+        await auth().signOut();
+
+        alert('Please Verify YOur Email Check Out Link In Your Inbox');
 
         navigation.navigate('Login');
       } else {

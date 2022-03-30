@@ -8,12 +8,14 @@ export default function SplashScreen() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    setTimeout(() => {
-      Auth().onAuthStateChanged(user => {
+    setTimeout(async () => {
+      const unsubscribe = await Auth().onAuthStateChanged(user => {
         const routeName = user !== null ? 'Home' : 'Login';
 
         navigation.dispatch(StackActions.replace(routeName));
       });
+
+      unsubscribe();
     }, 3000);
 
     return () => {};

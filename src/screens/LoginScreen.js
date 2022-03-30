@@ -25,14 +25,19 @@ export default function LoginScreen() {
   const handleLogin = async () => {
     try {
       if (email.length > 0 && password.length > 0) {
-        const isUserLogin = await auth().signInWithEmailAndPassword(
-          email,
-          password,
-        );
-        setMessage('');
-        console.log(isUserLogin);
+        const user = await auth().signInWithEmailAndPassword(email, password);
 
-        navigation.dispatch(StackActions.replace('Home'));
+        console.log(user);
+
+        if (user.user.emailVerified) {
+          alert('You Are Verified');
+          navigation.dispatch(StackActions.replace('Home'));
+        } else {
+          alert('Please Verify Your Email Checkout Inbox');
+
+          await auth().currentUser.sendEmailVerification();
+          await auth().signOut();
+        }
       } else {
         alert('Please Enter All Data');
       }
