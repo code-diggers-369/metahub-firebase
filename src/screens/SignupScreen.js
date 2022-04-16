@@ -10,7 +10,7 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
-import database from '@react-native-firebase/database';
+import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 
@@ -18,17 +18,29 @@ export default function SignupScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [name, setName] = useState('');
 
   //
   const navigation = useNavigation();
 
   const handleSignup = async () => {
     try {
-      if (email.length > 0 && password.length > 0) {
-        const isUserCreated = await auth().createUserWithEmailAndPassword(
+      if (email.length > 0 && password.length > 0 && name.length > 0) {
+        const response = await auth().createUserWithEmailAndPassword(
           email,
           password,
         );
+
+        const userData = {
+          id: response.user.uid,
+          name: name,
+          email: email,
+        };
+
+        await firestore()
+          .collection('users')
+          .doc(response.user.uid)
+          .set(userData);
 
         await auth().currentUser.sendEmailVerification();
 
@@ -54,6 +66,12 @@ export default function SignupScreen() {
         <Text style={{textAlign: 'center', fontSize: 20, fontWeight: 'bold'}}>
           Metahub
         </Text>
+        <TextInput
+          style={styles.inputBox}
+          placeholder="Enter Your Name"
+          value={name}
+          onChangeText={value => setName(value)}
+        />
         <TextInput
           style={styles.inputBox}
           placeholder="Enter Your Email"

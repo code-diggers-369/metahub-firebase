@@ -12,10 +12,9 @@ export default function SplashScreen() {
       const unsubscribe = await Auth().onAuthStateChanged(user => {
         const routeName = user !== null ? 'Home' : 'Login';
 
+        unsubscribe();
         navigation.dispatch(StackActions.replace(routeName));
       });
-
-      unsubscribe();
     }, 3000);
 
     return () => {};
