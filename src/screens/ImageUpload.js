@@ -12,6 +12,7 @@ export default function ImageUpload() {
     try {
       const response = await DocumentPicker.pickSingle({
         type: [DocumentPicker.types.images],
+        copyTo: 'cachesDirectory',
       });
       console.log(response);
       setImageData(response);
@@ -24,7 +25,7 @@ export default function ImageUpload() {
     try {
       const response = storage().ref(`/profile/${imageData.name}`);
 
-      const put = await response.putFile(imageData.uri);
+      const put = await response.putFile(imageData.fileCopyUri);
 
       setFullImgRefPath(put.metadata.fullPath);
       const url = await response.getDownloadURL();
